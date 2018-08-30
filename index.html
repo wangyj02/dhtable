@@ -57,29 +57,52 @@
                 this.pollutantdata.map(pollItem => {
                     this.monthdata.map(monthItem => {
                     var options = [];
-                options.columns = [];
-                options.columns[0].push({//第一列自定义index
+                    options.columns = [];
+                   options.columns[0].push({
+                    //第一列自定义index
                     title: "#", //标题  可不加
                     rowspan: 2,
                     formatter: function(value, row, index) {
                         return index + 1;
                     }
                 });
-                options.columns[0] = [];
-                options.columns[0].push({//第二列时间段
+                options.columns[0].push({
+                    //第二列时间段
+                    field: "GainTime",
                     title: "时间段", //标题  可不加
                     rowspan: 2,
-                    formatter: function() {
+                    formatter: function(value, row, index) {
                         var _time = new Date(monthItem.GainTime); //时间段
-                        var period = this.dateFtt("MM月dd日", _time);
-                        console.log(period);
+                        var value = this.dateFtt("MM月dd日", _time);
+                        return value;
                     }
                 });
-                console.log(options.columns)
-                options.columns[1]=[];
-                options.columns[1].push({ //污染物数据
+                options.columns[0].push({
+                    //污染物名称
+                    title: "pollItem.PollutantName", //标题  可不加
+                    colspan: 2,
+                    valign: "middle",
+                    align: "center"
+                });
 
-                })
+              
+                options.columns[1] = [];
+                options.columns[1].push({
+                    //污染物实测均值数据
+                    field: 'P"+pollItem.PollutantNo+"AvgValue',
+                    title: "实测均值浓度（毫克/升）",
+                    formatter: function(value, row, index) {
+                        return value==null?'-':monthItem["P" + pollItem.PollutantNo + "AvgValue"]
+                    }
+                });
+                options.columns[1].push({
+                    //污染物排放量
+                    field: 'P"+pollItem.PollutantNo+"CountValue',
+                    title: "排放量",
+                    formatter: function(value, row, index) {
+                        return value==null?'-':monthItem["P" + pollItem.PollutantNo + "CountValue"]
+                    }
+                });
             });
             });
             },
